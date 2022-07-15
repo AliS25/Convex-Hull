@@ -37,7 +37,6 @@ class graphNode {
     
     // Create a new graph node
             let dummyNode=new graphNode(counter,[xPosition,yPosition])
-            // Add it to the nodes array
     
     // Create an svg cicle element that corresponds to the above node
         const nodeCircle=document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -47,12 +46,14 @@ class graphNode {
         nodeCircle.setAttribute('cx',xPosition)
     nodeCircle.setAttribute('cy',yPosition)
     nodeCircle.setAttribute('id',counter)
-   
+//    Add the first graph node to the nodes array
             if(graphList.length==0)graphList.push(dummyNode);
+            //for the remaining nodes
 else{
+    //iterate through the nodes array
 for(let i=0;i<graphList.length;i++){
     // console.log(2)
-
+//position the new node based on its x-position in the nodes array
     if(xPosition<graphList[i].position[0]){
         // console.log(3)
 
@@ -72,47 +73,36 @@ for(let i=0;i<graphList.length;i++){
     }
 }
 }
-// console.log(graphList);
-
-// let listUpper=[graphList[0],graphList[1]];
-// for(let i=2;i<graphList.length;i++){
-//     listUpper.push(graphList[i])
-//     while(listUpper.length>2 &!((graphList[1].position[1]>graphList[0].position[1]&graphList[2].position[1]>graphList[1].position[1])||(graphList[1].position[1]<graphList[0].position[1]&graphList[2].position[1]<graphList[1].position[1]))){
-// listUpper[1]=listUpper.pop();
-//     }
-// }
-// console.log(listUpper)
+//list containing the upper hull
 let listUpper=[graphList[0],graphList[1]];
 for(let i=2;i<graphList.length;i++){
-    // if(graphList[i].position[1]<graphList[0].position[1]){
     listUpper.push(graphList[i])        
-
+//if the last three nodes don't make a right turn remove the middle one
     while(listUpper.length>2 &&(listUpper[listUpper.length-2].position[1]>listUpper[listUpper.length-3].position[1]&listUpper[listUpper.length-1].position[1]<listUpper[listUpper.length-2].position[1])){
         // console.log(listUpper[1])
 
 listUpper[listUpper.length-2]=listUpper.pop();
 // console.log(listUpper[1])
     }
-// }
 console.log(listUpper)
 }
-
+//list containing the lower hull
 let listLower=[graphList[graphList.length-1],graphList[graphList.length-2]];
 for(let i=graphList.length-3;i>=0;i--){
-    // if(graphList[i].position[1]>graphList[graphList.length-1].position[1]){
     listLower.push(graphList[i])        
-
+//if the last three nodes don't make a right turn remove the middle one
     while(listLower.length>2 &&(listLower[listLower.length-2].position[1]<listLower[listLower.length-3].position[1]&listLower[listLower.length-1].position[1]>listLower[listLower.length-2].position[1])){
         // console.log(listLower[1])
 
 listLower[listLower.length-2]=listLower.pop();
 // console.log(listLower[1])
     }
-// }
 console.log(listLower)
 }
+//remove the first and last element of the lower hull to avoid duplicate nodes
 listLower.pop();
 listLower.shift();
+//combine the two lists into one
 let listComplete=listUpper;
 for(let i=0;i<listLower.length;i++){
     listComplete.push(listLower[i])
@@ -123,16 +113,17 @@ console.log(listComplete)
 
 
 
-
+//everytime a node is added remove all the previous edges
 if(listUpper[1]!=null){
     let lineEdges=document.querySelectorAll(".lines");
     lineEdges.forEach(element => {
         element.remove();
     });
+    //iterate through the completed convex hull
 for(let i=0;i<listComplete.length;i++){
                   //Create an svg line element 
                     const drawLine=document.createElementNS("http://www.w3.org/2000/svg", "line");
-                    //Give it the two centers of the nodes to create an edge between them. Give the line a stroke color, type, and width
+                    //Give it the two centers of the nodes to create an edge between them. Give the line a stroke color, width, and a class.
                     drawLine.setAttribute('x1',listComplete[i].position[0])
                     drawLine.setAttribute('y1',listComplete[i].position[1])
                     if(i==listComplete.length-1){
@@ -144,15 +135,9 @@ for(let i=0;i<listComplete.length;i++){
                     drawLine.setAttribute('y2',listComplete[i+1].position[1])
                     }
                     drawLine.setAttribute('stroke','red');
-                    // drawLine.setAttribute('stroke-dasharray','10 5');
                     drawLine.setAttribute('stroke-width','3')
                     drawLine.setAttribute('class','lines')
 
-                    //Name the edge as a combination of the names of the two nodes, which are numbers. Name it starting with the smaller number
-                    // if(Number(graphList[i].name)<Number(nodeCircle.id))drawLine.setAttribute('name',graphList[i].name+''+nodeCircle.id)
-                    // else drawLine.setAttribute('name',nodeCircle.id+''+graphList[i].name)
-                    //Add the edge to the edge list
-                    // edgeList.push(drawLine); 
     
                     //Add the line to the panel
                     document.querySelector('.edges').appendChild(drawLine)
@@ -160,7 +145,7 @@ for(let i=0;i<listComplete.length;i++){
 }               
            
     
-    // Add the circle and the number to the panel
+    // Add the circle to the panel
     panel.appendChild(nodeCircle);
     // increment the counter
     counter++;
@@ -196,6 +181,7 @@ for(let i=0;i<listComplete.length;i++){
         edgeList=[];
         //reset the counter
         counter=0;
+        //Add the g element as the first element in svg which will contain the edges 
         let edgegroup=document.createElementNS("http://www.w3.org/2000/svg","g")
         edgegroup.setAttribute("class","edges")
         document.querySelector('svg').appendChild(edgegroup)
