@@ -74,23 +74,75 @@ for(let i=0;i<graphList.length;i++){
 }
 // console.log(graphList);
 
+// let listUpper=[graphList[0],graphList[1]];
+// for(let i=2;i<graphList.length;i++){
+//     listUpper.push(graphList[i])
+//     while(listUpper.length>2 &!((graphList[1].position[1]>graphList[0].position[1]&graphList[2].position[1]>graphList[1].position[1])||(graphList[1].position[1]<graphList[0].position[1]&graphList[2].position[1]<graphList[1].position[1]))){
+// listUpper[1]=listUpper.pop();
+//     }
+// }
+// console.log(listUpper)
 let listUpper=[graphList[0],graphList[1]];
-for(let i=3;i<graphList.length;i++){
-    listUpper.push(graphList[i])
-    while(listUpper.length>2 &!((graphList[1].position[1]>graphList[0].position[1]&graphList[2].position[1]>graphList[1].position[1])||(graphList[1].position[1]<graphList[0].position[1]&graphList[2].position[1]<graphList[1].position[1]))){
-listUpper[1]=listUpper.pop();
+for(let i=2;i<graphList.length;i++){
+    // if(graphList[i].position[1]<graphList[0].position[1]){
+    listUpper.push(graphList[i])        
+
+    while(listUpper.length>2 &&(listUpper[listUpper.length-2].position[1]>listUpper[listUpper.length-3].position[1]&listUpper[listUpper.length-1].position[1]<listUpper[listUpper.length-2].position[1])){
+        // console.log(listUpper[1])
+
+listUpper[listUpper.length-2]=listUpper.pop();
+// console.log(listUpper[1])
     }
-}
+// }
 console.log(listUpper)
+}
+
+let listLower=[graphList[graphList.length-1],graphList[graphList.length-2]];
+for(let i=graphList.length-3;i>=0;i--){
+    // if(graphList[i].position[1]>graphList[graphList.length-1].position[1]){
+    listLower.push(graphList[i])        
+
+    while(listLower.length>2 &&(listLower[listLower.length-2].position[1]<listLower[listLower.length-3].position[1]&listLower[listLower.length-1].position[1]>listLower[listLower.length-2].position[1])){
+        // console.log(listLower[1])
+
+listLower[listLower.length-2]=listLower.pop();
+// console.log(listLower[1])
+    }
+// }
+console.log(listLower)
+}
+listLower.pop();
+listLower.shift();
+let listComplete=listUpper;
+for(let i=0;i<listLower.length;i++){
+    listComplete.push(listLower[i])
+
+}
+
+console.log(listComplete)
+
+
+
+
 if(listUpper[1]!=null){
-for(let i=0;i<listUpper.length-1;i++){
+    let lineEdges=document.querySelectorAll(".lines");
+    lineEdges.forEach(element => {
+        element.remove();
+    });
+for(let i=0;i<listComplete.length;i++){
                   //Create an svg line element 
                     const drawLine=document.createElementNS("http://www.w3.org/2000/svg", "line");
                     //Give it the two centers of the nodes to create an edge between them. Give the line a stroke color, type, and width
-                    drawLine.setAttribute('x1',listUpper[i].position[0])
-                    drawLine.setAttribute('x2',listUpper[i+1].position[0])
-                    drawLine.setAttribute('y1',listUpper[i].position[1])
-                    drawLine.setAttribute('y2',listUpper[i+1].position[1])
+                    drawLine.setAttribute('x1',listComplete[i].position[0])
+                    drawLine.setAttribute('y1',listComplete[i].position[1])
+                    if(i==listComplete.length-1){
+                        drawLine.setAttribute('x2',listComplete[0].position[0])
+                        drawLine.setAttribute('y2',listComplete[0].position[1])
+                    }
+                    else{
+                    drawLine.setAttribute('x2',listComplete[i+1].position[0])
+                    drawLine.setAttribute('y2',listComplete[i+1].position[1])
+                    }
                     drawLine.setAttribute('stroke','red');
                     // drawLine.setAttribute('stroke-dasharray','10 5');
                     drawLine.setAttribute('stroke-width','3')
