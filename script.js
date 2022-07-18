@@ -75,15 +75,24 @@ for(let i=0;i<graphList.length;i++){
 }
 //list containing the upper hull
 let listUpper=[graphList[0],graphList[1]];
+// console.log("graphlist size is "+graphList.length)
+// console.log("1 "+listUpper)
 for(let i=2;i<graphList.length;i++){
-    listUpper.push(graphList[i])        
-//if the last three nodes don't make a right turn remove the middle one
-    while(listUpper.length>2 &&(listUpper[listUpper.length-2].position[1]>listUpper[listUpper.length-3].position[1]&listUpper[listUpper.length-1].position[1]<listUpper[listUpper.length-2].position[1])){
-        // console.log(listUpper[1])
+    // console.log("2 "+listUpper)
 
+    // console.log("i is "+i)
+    listUpper.push(graphList[i])     
+    // console.log("3 "+listUpper)
+   
+//if the last three nodes don't make a right turn remove the middle one
+    while(listUpper.length>2 &&(((listUpper[listUpper.length-3].position[1]-listUpper[listUpper.length-1].position[1])*(listUpper[listUpper.length-2].position[0]-listUpper[listUpper.length-3].position[0]))>((listUpper[listUpper.length-3].position[1]-listUpper[listUpper.length-2].position[1])*(listUpper[listUpper.length-1].position[0]-listUpper[listUpper.length-3].position[0])))){
+        console.log(listUpper[listUpper.length-2])
+// console.log(((listUpper[listUpper.length-2].position[1]-listUpper[listUpper.length-3].position[1])*(listUpper[listUpper.length-1].position[0]-listUpper[listUpper.length-2].position[0])))
+// console.log(((listUpper[listUpper.length-1].position[1]-listUpper[listUpper.length-2].position[1])*(listUpper[listUpper.length-2].position[0]-listUpper[listUpper.length-3].position[0])))
 listUpper[listUpper.length-2]=listUpper.pop();
-// console.log(listUpper[1])
+console.log(listUpper[listUpper.length-2])
     }
+    
 console.log(listUpper)
 }
 //list containing the lower hull
@@ -91,13 +100,15 @@ let listLower=[graphList[graphList.length-1],graphList[graphList.length-2]];
 for(let i=graphList.length-3;i>=0;i--){
     listLower.push(graphList[i])        
 //if the last three nodes don't make a right turn remove the middle one
-    while(listLower.length>2 &&(listLower[listLower.length-2].position[1]<listLower[listLower.length-3].position[1]&listLower[listLower.length-1].position[1]>listLower[listLower.length-2].position[1])){
+while(listLower.length>2 &&(((listLower[listLower.length-3].position[1]-listLower[listLower.length-1].position[1])*(listLower[listLower.length-2].position[0]-listLower[listLower.length-3].position[0]))>((listLower[listLower.length-3].position[1]-listLower[listLower.length-2].position[1])*(listLower[listLower.length-1].position[0]-listLower[listLower.length-3].position[0])))){
+
+// while(listLower.length>2 &&(listLower[listLower.length-2].position[1]<listLower[listLower.length-3].position[1]&listLower[listLower.length-1].position[1]>listLower[listLower.length-2].position[1])){
         // console.log(listLower[1])
 
 listLower[listLower.length-2]=listLower.pop();
 // console.log(listLower[1])
     }
-console.log(listLower)
+// console.log(listLower)
 }
 //remove the first and last element of the lower hull to avoid duplicate nodes
 listLower.pop();
@@ -108,7 +119,7 @@ for(let i=0;i<listLower.length;i++){
     listComplete.push(listLower[i])
 
 }
-
+console.log("-----------------------------------------------------------------------------------------------------------")
 console.log(listComplete)
 
 
